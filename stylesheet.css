@@ -1,0 +1,17 @@
+header {
+    font-size: 40;
+    color: aquamarine;
+}
+
+header.centre {
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+body {
+    font-family: Helvetica, sans-serif;
+    font-size: 20;
+}
+
