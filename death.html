@@ -1,0 +1,82 @@
+<head>
+    <title> cmpst IO </title>
+    <link rel = "stylesheet" type = "text/css" href = "stylesheet.css">
+</head>
+
+
+
+<body>
+<!--    <header class= "centre"> impending death  </header>-->
+  	
+	<div >impending death</div>
+    
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+	</script>
+	<canvas id="spiral" width="600" height="600" ></canvas>
+    <script type="text/javascript" >
+        var c=document.getElementById("spiral");
+        var ctx=c.getContext("2d");
+        var centerX = c.width/2;
+        var centerY = c.height/2;
+        ctx.moveTo(centerX, centerY);
+		
+	
+    
+        var gap = 1;     
+        var steps = 52; 
+		
+		var count = 0;
+		var originalDate = new Date("1988-01-19");
+		var currentDate = new Date();
+		var weeks = Math.round((currentDate - originalDate)/604800000);
+		//window.alert(weeks);
+    
+        var increment = 1*Math.PI/steps;		
+        var angle = increment;
+        while( count < 3120) {
+			var newX = centerX + angle * Math.cos(angle) * gap; 
+			var newY = centerY + angle * Math.sin(angle) * gap; 
+			//cxt.lineTo(newX, newY);
+			
+			ctx.beginPath();
+			if(count < weeks){
+			   ctx.fillRect(newX,newY,2,2);
+			}else{
+				if(count > 3120 - 52){
+					ctx.beginPath();
+					ctx.strokeStyle = "rgb(200,200,200)";
+					ctx.rect(newX,newY,5,5);
+					ctx.stroke();
+				}
+				else if(count >= 3120 - 208){
+					ctx.beginPath();
+					ctx.strokeStyle = "rgb(140,140,140,)";	
+					ctx.rect(newX,newY,5,5);
+					ctx.stroke();
+				}
+				else{
+					ctx.beginPath();
+					ctx.strokeStyle = "rgb(60,60,60,)";	
+					ctx.rect(newX,newY,5,5);
+					ctx.stroke();
+				}
+			}
+
+			
+			
+			
+			
+			count += 1;
+			//cxt.arc(newX,newY,2,0,2*Math.PI);
+			angle = angle + increment;
+        }
+       
+		//window.alert(count);
+    </script>
+	
+	
+</body>
+
+
+
+ 

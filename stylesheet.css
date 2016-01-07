@@ -29,3 +29,30 @@ div.text{
     margin-left: 80px;
     margin-right: 80px;
 }
+
+div.links{
+	text-align: left;
+	max-width: 40px;
+	
+}
+div.links a{
+	text-decoration: none;
+}
+div.links a:link{
+	color: rgb(40,40,40);
+}
+div.links a:visited{
+	color: rgb(140,140,140);
+}
+div.links a:hover{
+    color: rgb(254,5,95);
+}
+div.links a:active{
+    color: rgb(193,205,147);
+}
+
+canvas{
+	margin: auto;
+	display: block;
+	padding-top: 100;
+}
