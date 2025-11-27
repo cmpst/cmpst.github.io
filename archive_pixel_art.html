@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Image Gallery – Full Resolution Viewer</title>
+
+<style>
+  body {
+    margin: 0;
+    background: #0b0f17;
+    color: #e2e8f0;
+    font-family: system-ui, sans-serif;
+  }
+
+  h1 {
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    color: #cbd5e1;
+  }
+
+  /* Pinterest Masonry Layout */
+  .gallery {
+    column-count: 4;
+    column-gap: 14px;
+    padding: 60px;
+  }
+
+  .gallery img {
+    width: 100%;
+    margin-bottom: 14px;
+    border-radius: 4px;
+    background: #1e293b;
+    cursor: pointer;
+    display: block;
+    break-inside: avoid;
+    transition: transform .2s ease, box-shadow .2s ease;
+
+    /* Make pixel art crisp */
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  .gallery img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+  }
+
+  /* Full-resolution viewer modal */
+  #lightbox {
+    position: fixed;
+    inset: 0;
+    display: none;
+    background: rgba(0,0,0,.93);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    cursor: zoom-out;
+  }
+
+  #lightbox img {
+    border-radius: 6px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+
+    /* pixel-perfect scaling */
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  /* Responsive masonry */
+  @media (max-width: 1600px) {
+    .gallery { column-count: 3; }
+  }
+  @media (max-width: 1100px) {
+    .gallery { column-count: 2; }
+  }
+  @media (max-width: 700px) {
+    .gallery { column-count: 1; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Pixel Archive</h1>
+
+<div class="gallery"></div>
+
+<!-- Full-resolution modal -->
+<div id="lightbox">
+  <img id="lightbox-img" src="">
+</div>
+
+<script>
+// Manually ordered images
+const imageFiles = [
+"hta.png",
+"hta_trap.gif",
+"hta_trap2.gif",
+"spiderwalker.gif",
+"planet.png",
+"snelheid.png",
+"snelheidwarp.gif",
+"tubtravel.gif"
+];
+
+const gallery = document.querySelector(".gallery");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+
+/* ---------------------------
+   LIGHTBOX INTEGER SCALING
+----------------------------*/
+
+function applyLightboxIntegerScaling() {
+  const img = lightboxImg;
+
+  const naturalWidth = img.naturalWidth;
+  const naturalHeight = img.naturalHeight;
+
+  const maxWidth = window.innerWidth * 0.95;
+  const maxHeight = window.innerHeight * 0.95;
+
+  if (!naturalWidth || !naturalHeight) return;
+
+  // compute maximum integer scale that fits
+  const scaleW = maxWidth / naturalWidth;
+  const scaleH = maxHeight / naturalHeight;
+  const maxScale = Math.floor(Math.min(scaleW, scaleH));
+  
+  const MAX_ALLOWED_SCALE = 3;   
+  const scale = Math.max(1, Math.min(maxScale, MAX_ALLOWED_SCALE));
+
+
+  img.style.width = naturalWidth * scale + "px";
+  img.style.height = naturalHeight * scale + "px";
+}
+
+/* ---------------------------
+   BUILD GALLERY
+----------------------------*/
+
+imageFiles.forEach(file => {
+  const img = document.createElement("img");
+  img.src = "images/archive/pixel_art/" + file;
+  img.alt = file;
+
+  // Open lightbox at integer pixel scale
+  img.addEventListener("click", () => {
+    lightboxImg.src = "images/archive/pixel_art/" + file;
+
+    lightboxImg.onload = () => {
+      applyLightboxIntegerScaling();
+    };
+
+    lightbox.style.display = "flex";
+  });
+
+  gallery.appendChild(img);
+});
+
+/* ---------------------------
+   LIGHTBOX CLOSE HANDLERS
+----------------------------*/
+
+lightbox.addEventListener("click", () => {
+  lightbox.style.display = "none";
+  lightboxImg.src = "";
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    lightbox.style.display = "none";
+    lightboxImg.src = "";
+  }
+});
+
+/* Re-apply scaling if window resized */
+window.addEventListener("resize", () => {
+  if (lightbox.style.display === "flex") {
+    applyLightboxIntegerScaling();
+  }
+});
+</script>
+
+</body>
+</html>
